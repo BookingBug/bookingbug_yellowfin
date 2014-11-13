@@ -11,7 +11,13 @@ module BookingbugYellowfin
       end
     end
 
-    def self.add_booking_details_for_company company_id, sdate, edate = (Date.today + 1.day)
+    def self.amend_yesterdays_bookings
+      Company.find_each() do |company|
+        add_booking_details_for_company company.id, 1.day.ago
+      end
+    end
+
+    def self.add_booking_details_for_company company_id, sdate, edate = Date.tomorrow
       days = (Date.today - sdate) if sdate
       e_days = (Date.today - edate) if edate
       titles, rows = View::ReportsController.generate_report_data View::ReportsController::DATA_GROUPS[1][:reports][14],
