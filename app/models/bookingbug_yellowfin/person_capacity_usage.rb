@@ -31,6 +31,8 @@ module BookingbugYellowfin
       end
     end
 
+# company 37212
+# BookingbugYellowfin::PersonCapacityUsage.add_person_capacity_for_company 37212
     def self.add_person_capacity_for_company company_id, date = Date.yesterday
       for person in Person.where(company_id: company_id, deleted: false)
         booked_time = 0
@@ -43,12 +45,18 @@ module BookingbugYellowfin
         end
         blocked_slots = Slot.where(person_id: person.id, date: date, status: Slot::BOOKING_BLOCKED)
         for slot in blocked_slots
-          blocked_time += slot.ilen*5
+          if slot.slot_type == Schedule::DAY && slot.ilen == 1
+            blocked_time += (total_time * 60)
+          else
+            blocked_time += slot.ilen*5
+          end
         end
         booked_time = booked_time/60.0
+        blocked_time = (total_time*60) if (total_time*60) < blocked_time
         blocked_time = blocked_time/60.0
-        if p.present?
-          p.first.update_attributes(person_id: person.id, date: date, total_time_hrs: total_time, time_booked_hrs: booked_time, time_blocked_hrs: blocked_time)
+        capacity_record = self.where(person_id: person.id, date: date).first
+        if capacity_record.present?
+          capacity_record.update_attributes(person_id: person.id, date: date, total_time_hrs: total_time, time_booked_hrs: booked_time, time_blocked_hrs: blocked_time)
         else
           self.create(person_id: person.id, date: date, total_time_hrs: total_time, time_booked_hrs: booked_time, time_blocked_hrs: blocked_time)
         end
