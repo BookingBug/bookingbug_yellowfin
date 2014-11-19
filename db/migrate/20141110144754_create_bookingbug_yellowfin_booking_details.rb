@@ -3,14 +3,16 @@ class CreateBookingbugYellowfinBookingDetails < ActiveRecord::Migration
     create_table :bookingbug_yellowfin_booking_details do |t|
       t.integer :booking_id
       t.integer :slot_id
-      t.integer :company_id
+      t.string :company_id
       t.string :booking_created_at
+      t.string :yf_format_booking_created_at
       t.integer :member_id
-      t.integer :service_id
-      t.integer :resource_id
-      t.integer :person_id
+      t.string :service
+      t.string :resource
+      t.string :person
       t.string :session
       t.string :just_date
+      t.string :yf_format_just_date
       t.string :day_of_week
       t.string :month
       t.string :just_time

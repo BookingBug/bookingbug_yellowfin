@@ -18,6 +18,7 @@ module BookingbugYellowfin
     end
 
     def self.add_booking_details_for_company company_id, sdate, edate = Date.tomorrow
+      # BookingbugYellowfin::BookingDetails.add_booking_details_for_company 37260, (Date.today - 17.days)
       days = (Date.today - sdate) if sdate
       e_days = (Date.today - edate) if edate
       titles, rows = View::ReportsController.generate_report_data View::ReportsController::DATA_GROUPS[1][:reports][14],
@@ -32,14 +33,16 @@ module BookingbugYellowfin
         BookingbugYellowfin::BookingDetails.create( 
           booking_id: row[0],
           slot_id: row[1],
-          company_id: row[2],
+          company_id: company_id,
           booking_created_at: row[3],
+          yf_format_booking_created_at: BookingbugYellowfin::FormatHelpers.to_yf_format(row[3]), #yyyy/mm/dd
           member_id: row[4],
-          service_id: row[5],
-          resource_id: row[6],
-          person_id: row[7],
+          service: row[5],
+          resource: row[6],
+          person: row[7],
           session: row[8],
           just_date: row[9],
+          yf_format_just_date: BookingbugYellowfin::FormatHelpers.to_yf_format(row[9]),
           day_of_week: row[10],
           month: row[11],
           just_time: row[12],
