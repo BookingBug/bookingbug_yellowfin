@@ -3,7 +3,7 @@ module BookingbugYellowfin
 
     # Historical capacity usage
 
-    attr_accessible :person_id, :date, :total_time_hrs, :time_booked_hrs, :time_blocked_hrs
+    attr_accessible :person_id, :date, :total_time_hrs, :time_booked_hrs, :time_blocked_hrs, :yf_format_date
 
 # :total_time_hrs
 #       t.float :time_booked_hrs
@@ -56,9 +56,9 @@ module BookingbugYellowfin
         blocked_time = blocked_time/60.0
         capacity_record = self.where(person_id: person.id, date: date).first
         if capacity_record.present?
-          capacity_record.update_attributes(person_id: person.id, date: date, total_time_hrs: total_time, time_booked_hrs: booked_time, time_blocked_hrs: blocked_time)
+          capacity_record.update_attributes(person_id: person.id, date: date, yf_format_date: BookingbugYellowfin::FormatHelpers.to_yf_format(date), total_time_hrs: total_time, time_booked_hrs: booked_time, time_blocked_hrs: blocked_time)
         else
-          self.create(person_id: person.id, date: date, total_time_hrs: total_time, time_booked_hrs: booked_time, time_blocked_hrs: blocked_time)
+          self.create(person_id: person.id, date: date, yf_format_date: BookingbugYellowfin::FormatHelpers.to_yf_format(date), total_time_hrs: total_time, time_booked_hrs: booked_time, time_blocked_hrs: blocked_time)
         end
       end
     end
