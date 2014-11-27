@@ -1,15 +1,13 @@
 module BookingbugYellowfin
   class LeadTimes < ActiveRecord::Base
-    attr_accessible :date, :service_id, :next_am, :next_pm, :next_ev, :date_plus_one_next_am, :date_plus_one_next_pm, :date_plus_one_next_ev, :date_plus_two_next_am, :date_plus_two_next_pm, :date_plus_two_next_ev, :date_plus_three_next_am, :date_plus_three_next_pm, :date_plus_three_next_ev, :date_plus_four_next_am, :date_plus_four_next_pm, :date_plus_four_next_ev, :date_plus_five_next_am, :date_plus_five_next_pm, :date_plus_five_next_ev, :date_plus_six_next_am, :date_plus_six_next_pm, :date_plus_six_next_ev
+    attr_accessible :date, :service_id, :next_am, :next_pm, :next_ev, :date_plus_one_next_am, :date_plus_one_next_pm, :date_plus_one_next_ev, :date_plus_two_next_am, :date_plus_two_next_pm, :date_plus_two_next_ev, :date_plus_three_next_am, :date_plus_three_next_pm, :date_plus_three_next_ev, :date_plus_four_next_am, :date_plus_four_next_pm, :date_plus_four_next_ev, :date_plus_five_next_am, :date_plus_five_next_pm, :date_plus_five_next_ev, :date_plus_six_next_am, :date_plus_six_next_pm, :date_plus_six_next_ev, :yf_format_date
 
     def self.populate_lead_times
       failed = []
       # BookingbugYellowfin::LeadTimes.populate_lead_times
       for company in Company.where("cancelled = ? and id >= ?", false, 37035)
-      # for company in Company.where(id: 37013)
-        p '[37054, 37056].include?(company.parent_id) '
-        p [37054, 37056].include?(company.parent_id)
-        if ![37054, 37056].include?(company.parent_id)
+        # Not needed for parent companies
+        if ![37054, 37056, 37035].include?(company.parent_id) && !company.is_parent
           begin
             self.add_lead_times_for_company company.id 
           rescue
@@ -39,7 +37,7 @@ module BookingbugYellowfin
         sdate = Date.today
         edate = sdate + 1.week
         lead_times = self.where(date: sdate, service_id: service.id).first
-        lead_times = self.new(date: sdate, service_id: service.id, yf_format_date: FormatHelpers.to_yf_format(date)) if lead_times.blank?
+        lead_times = self.new(date: sdate, service_id: service.id, yf_format_date: FormatHelpers.to_yf_format(sdate)) if lead_times.blank?
         # edate = service.max_advance_time.to_date + 1
         nil_times = true
         cut_off_date = (service.max_advance_time.to_date + 1)
