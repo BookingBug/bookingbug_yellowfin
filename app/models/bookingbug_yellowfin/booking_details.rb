@@ -13,7 +13,7 @@ module BookingbugYellowfin
       end
     end
 
-    def self.add_booking_details_for_company company_id, sdate, edate = Date.tomorrow
+    def self.add_booking_details_for_company company_id, sdate, edate = ::Date.tomorrow
       # BookingbugYellowfin::BookingDetails.add_booking_details_for_company 37260, (Date.today - 17.days)
       # BookingbugYellowfin::BookingDetails.add_booking_details_for_company 37260, (Date.today - 60.days)
       # BookingbugYellowfin::BookingDetails.add_booking_details_for_company c.id, (Date.today - 60.days)
