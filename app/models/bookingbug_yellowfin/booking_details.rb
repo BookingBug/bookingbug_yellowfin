@@ -1,10 +1,6 @@
 module BookingbugYellowfin
   class BookingDetails < ActiveRecord::Base
 
-    def self.populate_all_columns
-      populate_all_booking_details
-    end
-
     def self.populate_all_booking_details
       Company.find_each() do |company|
         add_booking_details_for_company company.id, company.created_at.to_date
@@ -19,6 +15,8 @@ module BookingbugYellowfin
 
     def self.add_booking_details_for_company company_id, sdate, edate = Date.tomorrow
       # BookingbugYellowfin::BookingDetails.add_booking_details_for_company 37260, (Date.today - 17.days)
+      # BookingbugYellowfin::BookingDetails.add_booking_details_for_company 37260, (Date.today - 60.days)
+      # BookingbugYellowfin::BookingDetails.add_booking_details_for_company c.id, (Date.today - 60.days)
       days = (Date.today - sdate) if sdate
       e_days = (Date.today - edate) if edate
       titles, rows = View::ReportsController.generate_report_data View::ReportsController::DATA_GROUPS[1][:reports][14],

@@ -29,7 +29,7 @@ class CreateBookingbugYellowfinBookingDetails < ActiveRecord::Migration
       t.string :name
       t.string :channel
       t.string :readable_current_multi_stat
-      t.string :notes
+      t.text :notes
       t.string :feedback
       t.string :pretty_print_multi_status
     end

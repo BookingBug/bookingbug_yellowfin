@@ -39,7 +39,7 @@ module BookingbugYellowfin
         sdate = Date.today
         edate = sdate + 1.week
         lead_times = self.where(date: sdate, service_id: service.id).first
-        lead_times = self.new(date: sdate, service_id: service.id) if lead_times.blank?
+        lead_times = self.new(date: sdate, service_id: service.id, yf_format_date: FormatHelpers.to_yf_format(date)) if lead_times.blank?
         # edate = service.max_advance_time.to_date + 1
         nil_times = true
         cut_off_date = (service.max_advance_time.to_date + 1)

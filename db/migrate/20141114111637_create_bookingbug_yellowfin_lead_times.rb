@@ -3,6 +3,7 @@ class CreateBookingbugYellowfinLeadTimes < ActiveRecord::Migration
     create_table :bookingbug_yellowfin_lead_times do |t|
       t.date :date
       t.integer :service_id
+      t.string :yf_format_date
       t.string :next_am
       t.string :next_pm
       t.string :next_ev
