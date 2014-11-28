@@ -12,7 +12,7 @@ module BookingbugYellowfin
     def self.populate_all_capacity_usage
       failed_imports = []
       Company.find_each() do |company|
-        (Date.today - 4.weeks).to_date.upto(Date.today) do |date|
+        (::Date.today - 4.weeks).to_date.upto(::Date.today) do |date|
           begin
             add_person_capacity_for_company company.id, date
           rescue
@@ -33,7 +33,7 @@ module BookingbugYellowfin
 
 # company 37212
 # BookingbugYellowfin::PersonCapacityUsage.add_person_capacity_for_company 37212
-    def self.add_person_capacity_for_company company_id, date = Date.yesterday
+    def self.add_person_capacity_for_company company_id, date = ::Date.yesterday
       for person in Person.where(company_id: company_id, deleted: false)
         booked_time = 0
         blocked_time = 0

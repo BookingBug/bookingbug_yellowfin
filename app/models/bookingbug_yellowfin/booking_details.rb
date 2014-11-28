@@ -17,8 +17,8 @@ module BookingbugYellowfin
       # BookingbugYellowfin::BookingDetails.add_booking_details_for_company 37260, (Date.today - 17.days)
       # BookingbugYellowfin::BookingDetails.add_booking_details_for_company 37260, (Date.today - 60.days)
       # BookingbugYellowfin::BookingDetails.add_booking_details_for_company c.id, (Date.today - 60.days)
-      days = (Date.today - sdate) if sdate
-      e_days = (Date.today - edate) if edate
+      days = (::Date.today - sdate) if sdate
+      e_days = (::Date.today - edate) if edate
       titles, rows = View::ReportsController.generate_report_data View::ReportsController::DATA_GROUPS[1][:reports][14],
                                                    company_id,
                                                    company_id.to_s,

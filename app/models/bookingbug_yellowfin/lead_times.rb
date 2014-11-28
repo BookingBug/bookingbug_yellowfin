@@ -34,7 +34,7 @@ module BookingbugYellowfin
         # TODO
         # a) Refactor time data api into a class and use the class
         # b) Use a gem for the API
-        sdate = Date.today
+        sdate = ::Date.today
         edate = sdate + 1.week
         lead_times = self.where(date: sdate, service_id: service.id).first
         lead_times = self.new(date: sdate, service_id: service.id, yf_format_date: FormatHelpers.to_yf_format(sdate)) if lead_times.blank?
@@ -62,9 +62,9 @@ module BookingbugYellowfin
           if data["error"].blank?
             events = data['_embedded']['events']
             for event in events
-              next if lead_times.lead_times_found? Date.parse(event["date"])
-              event_date = Date.parse(event["date"])
-              days_diff = (event_date - Date.today).to_i
+              next if lead_times.lead_times_found? ::Date.parse(event["date"])
+              event_date = ::Date.parse(event["date"])
+              days_diff = (event_date - ::Date.today).to_i
               times = event["times"]
               if times.present?
                 for time in times
@@ -76,7 +76,7 @@ module BookingbugYellowfin
                   elsif t > 1020 && time["avail"] == 1
                     lead_times.time_found event_date, :ev, service
                   end
-                  break if lead_times.lead_times_found? Date.parse(event["date"])
+                  break if lead_times.lead_times_found? ::Date.parse(event["date"])
                 end
               end
             end
@@ -101,7 +101,7 @@ module BookingbugYellowfin
       # look at min cancellation date
       # p 'date'
       # p date
-      days_diff = (date - Date.today).to_i
+      days_diff = (date - ::Date.today).to_i
       if self.read_attribute(build_attr_name(date ,time_period)).nil? &&
         service.min_book_days <= days_diff
         # p 'build_attr_name(date ,time_period)'
@@ -118,7 +118,7 @@ module BookingbugYellowfin
 
     # lead_times.write_attribute(build_attr_name(event_date,:am), )
     def self.build_attr_name date, time_period
-      if date == Date.today
+      if date == ::Date.today
         case time_period
         when :am
           "next_am"
@@ -128,7 +128,7 @@ module BookingbugYellowfin
           "next_ev"
         end
       else
-        diff = (date - Date.today).to_i
+        diff = (date - ::Date.today).to_i
         case time_period
         when :am
           "date_plus_#{diff.humanize}_next_am"

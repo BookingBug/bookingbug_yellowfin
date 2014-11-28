@@ -6,7 +6,7 @@ module BookingbugYellowfin
       failed_imports = []
       Company.find_each() do |company|
         # (Date.today).to_date.upto(Date.today + 3.weeks) do |date|
-          date = Date.today
+          date = ::Date.today
           begin
             add_person_capacity_for_company company.id, date
           rescue
@@ -22,7 +22,7 @@ module BookingbugYellowfin
 # company 37212
 # BookingbugYellowfin::PersonCapacityFuture.add_person_capacity_for_company 37474, Date.today
 
-    def self.add_person_capacity_for_company company_id, date = Date.today
+    def self.add_person_capacity_for_company company_id, date = ::Date.today
       for person in Person.where(company_id: company_id, deleted: false)
         capacity_record = self.where(person_id: person.id, date: date).first
         capacity_record = self.create(person_id: person.id, date: date, yf_format_date: FormatHelpers.to_yf_format(date)) if capacity_record.blank?
@@ -55,10 +55,10 @@ module BookingbugYellowfin
     end
 
     def self.build_attr_value_hash start_date, date, total, booked, blocked
-      if date == Date.today
+      if date == ::Date.today
         {date_total_time_hrs: total, date_time_booked_hrs: booked, date_time_blocked_hrs: blocked}
       else
-        diff = (date - Date.today).to_i
+        diff = (date - ::Date.today).to_i
         {"date_plus_#{diff.humanize}_total_time_hrs" => total, "date_plus_#{diff.humanize}_time_booked_hrs" => booked, "date_plus_#{diff.humanize}_time_blocked_hrs" => blocked}
       end
     end
