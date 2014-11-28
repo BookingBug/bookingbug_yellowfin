@@ -5,22 +5,17 @@ module BookingbugYellowfin
     def self.populate_all_capacity_usage
       failed_imports = []
       Company.find_each() do |company|
-        # (Date.today).to_date.upto(Date.today + 3.weeks) do |date|
           date = ::Date.today
           begin
             add_person_capacity_for_company company.id, date
           rescue
             failed_imports << [date, company.id]
           end
-        # end
       end
       p 'failed_imports **********'
       p failed_imports
       return true
     end
-
-# company 37212
-# BookingbugYellowfin::PersonCapacityFuture.add_person_capacity_for_company 37474, Date.today
 
     def self.add_person_capacity_for_company company_id, date = ::Date.today
       for person in Person.where(company_id: company_id, deleted: false)

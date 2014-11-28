@@ -1,13 +1,7 @@
 module BookingbugYellowfin
   class PersonCapacityUsage < ActiveRecord::Base
 
-    # Historical capacity usage
-
     attr_accessible :person_id, :date, :total_time_hrs, :time_booked_hrs, :time_blocked_hrs, :yf_format_date
-
-# :total_time_hrs
-#       t.float :time_booked_hrs
-#       t.float :time_blocked_hrs
 
     def self.populate_all_capacity_usage
       failed_imports = []
@@ -31,8 +25,6 @@ module BookingbugYellowfin
       end
     end
 
-# company 37212
-# BookingbugYellowfin::PersonCapacityUsage.add_person_capacity_for_company 37212
     def self.add_person_capacity_for_company company_id, date = ::Date.yesterday
       for person in Person.where(company_id: company_id, deleted: false)
         booked_time = 0
@@ -64,16 +56,3 @@ module BookingbugYellowfin
     end
   end
 end
-
-# [Sat, 27 Sep 2013, 36997]
-# BookingbugYellowfin::PersonCapacityUsage.populate_all_capacity_usage
-
-# BookingbugYellowfin::PersonCapacityUsage.add_person_capacity_for_company company_id, date
-
-# [Sat, 28 Sep 2013, 36997]
-
-# SELECT table_schema "fco", sum( data_length + index_length ) / 1024 / 1024 "Data Base Size in MB" 
-# FROM information_schema.TABLES GROUP BY table_schema ; 
-
-
-

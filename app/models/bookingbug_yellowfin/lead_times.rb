@@ -4,7 +4,6 @@ module BookingbugYellowfin
 
     def self.populate_lead_times
       failed = []
-      # BookingbugYellowfin::LeadTimes.populate_lead_times
       for company in Company.where("cancelled = ? and id >= ?", false, 37035)
         # Not needed for parent companies
         if ![37054, 37056, 37035, 37045].include?(company.parent_id) && !company.is_parent
@@ -22,33 +21,14 @@ module BookingbugYellowfin
     def self.add_lead_times_for_company company_id
       # TODO localhost should look at the port number
       domain = (Rails.env.production? ? LOCAL_SETTINGS["site_domain"] : "localhost:3000" )
-      # BookingbugYellowfin::LeadTimes.add_lead_times_for_company 1
-      # for service in Service.where(company_id: company_id, deleted: false, disabled: false)
-      # p 'Service.where(company_id: company_id, deleted: false, disabled: false).first'
-      # p Service.where(company_id: company_id, deleted: false, disabled: false).first
       for service in Service.where(company_id: company_id, deleted: false, disabled: false)
-        # service = Service.find(50554) # home design, almost no availability
-        # service = Service.find(49929)
-        # company_id = 37212
-        # event_id = 742613
-        # TODO
-        # a) Refactor time data api into a class and use the class
-        # b) Use a gem for the API
         sdate = ::Date.today
         edate = sdate + 1.week
         lead_times = self.where(date: sdate, service_id: service.id).first
         lead_times = self.new(date: sdate, service_id: service.id, yf_format_date: FormatHelpers.to_yf_format(sdate)) if lead_times.blank?
-        # edate = service.max_advance_time.to_date + 1
         nil_times = true
         cut_off_date = (service.max_advance_time.to_date + 1)
         while nil_times && sdate < cut_off_date
-          # p '11111 ----'
-          # p nil_times
-          # p sdate
-          # p edate
-          # p 'cut_off_date'
-          # p cut_off_date
-        # sdate.upto(sdate) do |date|
         protocol = (Rails.env.production? ? 'https' : "http" )
           uri = URI.parse("#{protocol}://#{domain}/api/v1/#{company_id}/time_data?date=#{sdate.iso8601}&end_date=#{edate}&num_resources=1&service_id=#{service.id}")
           http = Net::HTTP.new(uri.host, uri.port)
@@ -98,16 +78,9 @@ module BookingbugYellowfin
     end
 
     def time_found date, time_period, service
-      # look at min cancellation date
-      # p 'date'
-      # p date
       days_diff = (date - ::Date.today).to_i
       if self.read_attribute(build_attr_name(date ,time_period)).nil? &&
         service.min_book_days <= days_diff
-        # p 'build_attr_name(date ,time_period)'
-        # p build_attr_name(date ,time_period)
-        # p 'days_diff'
-        # p days_diff
         self[build_attr_name(date ,time_period)] = days_diff
       end
     end
@@ -116,7 +89,6 @@ module BookingbugYellowfin
       BookingbugYellowfin::LeadTimes.build_attr_name date, time_period
     end
 
-    # lead_times.write_attribute(build_attr_name(event_date,:am), )
     def self.build_attr_name date, time_period
       if date == ::Date.today
         case time_period
