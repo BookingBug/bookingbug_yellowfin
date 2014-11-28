@@ -49,14 +49,14 @@ module BookingbugYellowfin
           # p 'cut_off_date'
           # p cut_off_date
         # sdate.upto(sdate) do |date|
-          uri = URI.parse("http://#{domain}/api/v1/#{company_id}/time_data?date=#{sdate.iso8601}&end_date=#{edate}&num_resources=1&service_id=#{service.id}")
-          # uri = URI.parse("http://localhost:3000/api/v1/#{company_id}/time_data?date=#{date.iso8601}&num_resources=1&service_id=#{50554}")
-          # uri = URI.parse("http://localhost:3000/api/v1/#{company_id}/time_data?date=#{date.iso8601}&num_resources=1&event_id=#{742613}")
+        protocol = (Rails.env.production? ? 'https' : "http" )
+          uri = URI.parse("#{protocol}://#{domain}/api/v1/#{company_id}/time_data?date=#{sdate.iso8601}&end_date=#{edate}&num_resources=1&service_id=#{service.id}")
           http = Net::HTTP.new(uri.host, uri.port)
           request = Net::HTTP::Get.new(uri.request_uri)
           request.add_field 'App-Id', '08f4a5e6'
           request.add_field 'App-Key', '6d6f6a0d11ccfe652b5ea94b5ad7deb6'
           request.add_field 'Bypass-Auth', 'true'
+          http.use_ssl = true if Rails.env.production?
           response = http.request(request)
           data = JSON.parse(response.body)
           if data["error"].blank?

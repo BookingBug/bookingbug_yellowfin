@@ -27,7 +27,7 @@ module BookingbugYellowfin
 
     def self.amend_yesterdays_capacity_usage
       Company.find_each() do |company|
-        add_person_capacity_for_company company.id, 1.day.ago
+        add_person_capacity_for_company company.id, 1.day.ago.to_date
       end
     end
 
