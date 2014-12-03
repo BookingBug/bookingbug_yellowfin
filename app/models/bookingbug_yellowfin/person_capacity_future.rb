@@ -3,8 +3,11 @@ module BookingbugYellowfin
     # attr_accessible :title, :body
 
     def self.populate_all_capacity_usage
+      p 'populate future capacity usage'
+      $stdout.sync = true
       failed_imports = []
       Company.find_each() do |company|
+          print '.'
           date = ::Date.today
           begin
             add_person_capacity_for_company company.id, date

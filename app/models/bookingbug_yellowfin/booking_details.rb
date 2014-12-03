@@ -1,13 +1,19 @@
 module BookingbugYellowfin
   class BookingDetails < ActiveRecord::Base
     def self.populate_all_booking_details
+      p 'Starting populate_all_booking_details...'
+      $stdout.sync = true
       Company.find_each() do |company|
+        print '.'
         add_booking_details_for_company company.id, company.created_at.to_date
       end
     end
 
     def self.amend_yesterdays_bookings
+      p 'Starting amend_yesterdays_bookings...'
+      $stdout.sync = true
       Company.find_each() do |company|
+        print '.'
         add_booking_details_for_company company.id, 1.day.ago.to_date
       end
     end
