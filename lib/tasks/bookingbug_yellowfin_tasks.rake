@@ -18,7 +18,7 @@ task :populate_lead_times => :environment do
 end
 
 desc "Task to populate bookingbug_yellowfin tables for yellowfin BI"
-task :populate_all_capacity_usage => :environment do
+task :populate_all_future_capacity_usage => :environment do
   BookingbugYellowfin::PersonCapacityFuture.populate_all_capacity_usage
 end
 
