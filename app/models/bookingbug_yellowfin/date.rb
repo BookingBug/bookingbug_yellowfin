@@ -3,8 +3,8 @@ module BookingbugYellowfin
     validates_uniqueness_of :date
     attr_accessible :date
 
-    def self.populate_six_months_forward
-      p 'populate date six months forward'
+    def self.populate_four_months_forward
+      p 'populate date four months forward'
       $stdout.sync = true
       last_date = BookingbugYellowfin::Date.last
       ::Date.parse(last_date.date).upto(::Date.today+4.months) do |d|

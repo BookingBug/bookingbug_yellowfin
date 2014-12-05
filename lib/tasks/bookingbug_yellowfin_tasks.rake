@@ -34,6 +34,6 @@ end
 
 
 desc "Task to populate bookingbug_yellowfin tables for yellowfin BI"
-task :populate_six_months_forward => :environment do
-  BookingbugYellowfin::Date.populate_six_months_forward
+task :populate_four_months_forward => :environment do
+  BookingbugYellowfin::Date.populate_four_months_forward
 end

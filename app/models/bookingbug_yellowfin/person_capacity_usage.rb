@@ -7,7 +7,7 @@ module BookingbugYellowfin
       failed_imports = []
       p 'populate all historic capacity usage'
       $stdout.sync = true
-      Company.find_each() do |company|
+      for company in Company.where("cancelled != ? template is null or template = ?", true, false)
         print '.'
         (::Date.today - 4.weeks).to_date.upto(::Date.today) do |date|
           begin
@@ -39,13 +39,15 @@ module BookingbugYellowfin
       return true
     end
 
+    # BookingbugYellowfin::PersonCapacityUsage.add_person_capacity_for_company c, date
     def self.add_person_capacity_for_company company_id, date = ::Date.yesterday
-      for person in Person.where(company_id: company_id, deleted: false)
+      for person in Person.where(company_id: company_id, deleted: false, disabled: false)
         booked_time = 0
         blocked_time = 0
         next if person.schedule.blank?
+        p 'person'
+        p person
         total_time = person.schedule.total_time_available_for_date(date)
-
         total_time = total_time/60.0 #Convert to hours
         booked_slots = Slot.where(person_id: person.id, date: date, status: Slot::BOOKING_BOOKED)
         for slot in booked_slots

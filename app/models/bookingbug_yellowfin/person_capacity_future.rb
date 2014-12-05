@@ -1,12 +1,12 @@
 module BookingbugYellowfin
   class PersonCapacityFuture < ActiveRecord::Base
     # attr_accessible :title, :body
-
+    # BookingbugYellowfin::PersonCapacityFuture.populate_all_capacity_usage
     def self.populate_all_capacity_usage
       p 'populate future capacity usage'
       $stdout.sync = true
       failed_imports = []
-      Company.find_each() do |company|
+      for company in Company.where("cancelled != ? template is null or template = ?", true, false)
           print '.'
           date = ::Date.today
           begin
@@ -20,12 +20,13 @@ module BookingbugYellowfin
       return true
     end
 
+    # BookingbugYellowfin::PersonCapacityFuture.add_person_capacity_for_company(37036, Date.parse('Wed, 03 Dec 2014'))
     def self.add_person_capacity_for_company company_id, date = ::Date.today
-      for person in Person.where(company_id: company_id, deleted: false)
+      for person in Person.where(company_id: company_id, deleted: false, disabled: false)
         capacity_record = self.where(person_id: person.id, date: date).first
         capacity_record = self.create(person_id: person.id, date: date, yf_format_date: FormatHelpers.to_yf_format(date)) if capacity_record.blank?
         FormatHelpers.to_yf_format(date)
-        date.upto(date+3.weeks) do |cdate|
+        date.upto(date+20.days) do |cdate|
           booked_time = 0
           blocked_time = 0
           next if person.schedule.blank?

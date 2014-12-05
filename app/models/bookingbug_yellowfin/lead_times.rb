@@ -2,14 +2,15 @@ module BookingbugYellowfin
   class LeadTimes < ActiveRecord::Base
     attr_accessible :date, :service_id, :next_am, :next_pm, :next_ev, :date_plus_one_next_am, :date_plus_one_next_pm, :date_plus_one_next_ev, :date_plus_two_next_am, :date_plus_two_next_pm, :date_plus_two_next_ev, :date_plus_three_next_am, :date_plus_three_next_pm, :date_plus_three_next_ev, :date_plus_four_next_am, :date_plus_four_next_pm, :date_plus_four_next_ev, :date_plus_five_next_am, :date_plus_five_next_pm, :date_plus_five_next_ev, :date_plus_six_next_am, :date_plus_six_next_pm, :date_plus_six_next_ev, :yf_format_date
 # BookingbugYellowfin::LeadTimes.populate_lead_times
+# BookingbugYellowfin::LeadTimes.
     def self.populate_lead_times
       p 'populate lead times'
       $stdout.sync = true
       failed = []
-      for company in Company.where("cancelled = ? and id >= ?", false, 37035)
+      for company in Company.where("cancelled != ? template is null or template = ?", true, false)
         print '.'
         # Not needed for parent companies
-        if ![37054, 37056, 37035, 37045].include?(company.parent_id) && !company.is_parent
+        if ![37054, 37056, 37035, 37045, 36990].include?(company.membership_id) && !company.is_parent
           begin
             self.add_lead_times_for_company company.id 
           rescue
@@ -17,6 +18,7 @@ module BookingbugYellowfin
           end
         end
       end
+      p ""
       p 'failed'
       p failed
     end
