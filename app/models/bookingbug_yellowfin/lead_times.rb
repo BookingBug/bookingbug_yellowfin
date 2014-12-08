@@ -7,7 +7,7 @@ module BookingbugYellowfin
       p 'populate lead times'
       $stdout.sync = true
       failed = []
-      for company in Company.where("cancelled != ? template is null or template = ?", true, false)
+      for company in Company.where("cancelled != ? and template is null or template = ?", true, false)
         print '.'
         # Not needed for parent companies
         if ![37054, 37056, 37035, 37045, 36990].include?(company.membership_id) && !company.is_parent

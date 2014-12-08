@@ -6,7 +6,7 @@ module BookingbugYellowfin
       p 'populate future capacity usage'
       $stdout.sync = true
       failed_imports = []
-      for company in Company.where("cancelled != ? template is null or template = ?", true, false)
+      for company in Company.where("cancelled != ? and template is null or template = ?", true, false)
           print '.'
           date = ::Date.today
           begin

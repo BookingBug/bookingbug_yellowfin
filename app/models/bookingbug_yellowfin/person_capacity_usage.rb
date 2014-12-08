@@ -7,7 +7,7 @@ module BookingbugYellowfin
       failed_imports = []
       p 'populate all historic capacity usage'
       $stdout.sync = true
-      for company in Company.where("cancelled != ? template is null or template = ?", true, false)
+      for company in Company.where("cancelled != ? and template is null or template = ?", true, false)
         print '.'
         (::Date.today - 4.weeks).to_date.upto(::Date.today) do |date|
           begin
