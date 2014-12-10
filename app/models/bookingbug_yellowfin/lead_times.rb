@@ -18,6 +18,7 @@ module BookingbugYellowfin
           end
         end
       end
+      ::BookingbugYellowfin::LeadTimeDays.populate_lead_time_days
       p ""
       p 'failed'
       p failed
@@ -73,7 +74,6 @@ module BookingbugYellowfin
         end
         lead_times.save!
       end #close for
-      ::BookingbugYellowfin::LeadTimeDays.populate_lead_time_days
       true
     end
 
