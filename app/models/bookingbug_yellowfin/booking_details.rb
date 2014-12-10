@@ -14,7 +14,7 @@ module BookingbugYellowfin
       $stdout.sync = true
       Company.find_each() do |company|
         print '.'
-        add_booking_details_for_company company.id, 1.day.ago.to_date
+        add_booking_details_for_company company.id, 2.day.ago.to_date
       end
     end
 
@@ -30,6 +30,7 @@ module BookingbugYellowfin
                                                      :fields=>View::ReportsController::DATA_GROUPS[1][:reports][14][:fields]
                                                    }
       for row in rows
+        next if row[19].blank?
         record = BookingbugYellowfin::BookingDetails.where( 
           booking_id: row[0]
           ).first
