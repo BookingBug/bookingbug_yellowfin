@@ -10,7 +10,7 @@ module BookingbugYellowfin
       for company in Company.where("cancelled != ? and template is null or template = ?", true, false)
         print '.'
         # Not needed for parent companies
-        if [37054, 37056, 37035, 37045, 36990].include?(company.base_company_id) && !company.is_parent
+        if ![37054, 37056, 37045, 36990].include?(company.base_company_id) && !company.is_parent
           begin
             self.add_lead_times_for_company company.id 
           rescue
@@ -73,6 +73,7 @@ module BookingbugYellowfin
         end
         lead_times.save!
       end #close for
+      ::BookingbugYellowfin::LeadTimeDays.populate_lead_time_days
       true
     end
 
