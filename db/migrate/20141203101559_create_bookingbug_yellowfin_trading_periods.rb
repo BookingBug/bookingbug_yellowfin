@@ -3,10 +3,10 @@ class CreateBookingbugYellowfinTradingPeriods < ActiveRecord::Migration
     create_table :bookingbug_yellowfin_trading_periods do |t|
       t.date :date
       t.string :yf_date
-      t.int :year
+      t.integer :year
       t.string :month
-      t.int :period
-      t.int :week
+      t.integer :period
+      t.integer :week
       t.timestamps
     end
   end
