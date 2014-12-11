@@ -96,7 +96,8 @@ module BookingbugYellowfin
     end
 
     def self.build_attr_name date, time_period
-      if ((date - ::Date.today).to_i % 7) == 0
+      date_column = (date - ::Date.today).to_i%7
+      if (date_column) == 0
         case time_period
         when :am
           "next_am"
@@ -106,14 +107,13 @@ module BookingbugYellowfin
           "next_ev"
         end
       else
-        diff = (date - ::Date.today).to_i
         case time_period
         when :am
-          "date_plus_#{diff.humanize}_next_am"
+          "date_plus_#{date_column.humanize}_next_am"
         when :pm
-          "date_plus_#{diff.humanize}_next_pm"
+          "date_plus_#{date_column.humanize}_next_pm"
         else
-          "date_plus_#{diff.humanize}_next_ev"
+          "date_plus_#{date_column.humanize}_next_ev"
         end
       end
     end
