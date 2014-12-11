@@ -96,7 +96,7 @@ module BookingbugYellowfin
     end
 
     def self.build_attr_name date, time_period
-      if date == ::Date.today
+      if ((date - ::Date.today).to_i % 7) == 0
         case time_period
         when :am
           "next_am"
