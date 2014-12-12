@@ -30,12 +30,12 @@ module BookingbugYellowfin
           booked_time = 0
           blocked_time = 0
           next if person.schedule.blank?
-          total_time = person.schedule.total_time_available_for_date(date)/60.0 #Convert to hours
-          booked_slots = Slot.where(person_id: person.id, date: date, status: Slot::BOOKING_BOOKED)
+          total_time = person.schedule.total_time_available_for_date(cdate)/60.0 #Convert to hours
+          booked_slots = Slot.where(person_id: person.id, date: cdate, status: Slot::BOOKING_BOOKED)
           for slot in booked_slots
             booked_time += slot.ilen*5
           end
-          blocked_slots = Slot.where(person_id: person.id, date: date, status: Slot::BOOKING_BLOCKED)
+          blocked_slots = Slot.where(person_id: person.id, date: cdate, status: Slot::BOOKING_BLOCKED)
           for slot in blocked_slots
             if slot.slot_type == Schedule::DAY && slot.ilen == 1
               blocked_time += (total_time * 60)
@@ -46,21 +46,20 @@ module BookingbugYellowfin
           booked_time = booked_time/60.0
           blocked_time = (total_time*60) if (total_time*60) < blocked_time
           blocked_time = blocked_time/60.0
-          booked_time||= 0.0
-          blocked_time||= 0.0
-          capacity_record.update_attributes(build_attr_value_hash(date, cdate, total_time, booked_time, blocked_time))
+          booked_time ||= 0.0
+          blocked_time ||= 0.0
+          capacity_record.update_attributes(build_attr_value_hash(cdate, total_time, booked_time, blocked_time))
         end
       end
     end
 
-    def self.build_attr_value_hash start_date, date, total, booked, blocked
-      if date == ::Date.today
+    def self.build_attr_value_hash date, total, booked, blocked
+      if ::Date.today == date
         {date_total_time_hrs: total, date_time_booked_hrs: booked, date_time_blocked_hrs: blocked}
       else
-        diff = (date - ::Date.today).to_i
-        {"date_plus_#{diff.humanize}_total_time_hrs" => total, "date_plus_#{diff.humanize}_time_booked_hrs" => booked, "date_plus_#{diff.humanize}_time_blocked_hrs" => blocked}
+        date_column = (date - ::Date.today)
+        {"date_plus_#{date_column.humanize}_total_time_hrs" => total, "date_plus_#{date_column.humanize}_time_booked_hrs" => booked, "date_plus_#{date_column.humanize}_time_blocked_hrs" => blocked}
       end
     end
-
   end
 end
