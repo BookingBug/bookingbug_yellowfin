@@ -5,7 +5,7 @@ module BookingbugYellowfin
     # This is the same as the lead times table uses day names instead of day+1 etc
     def self.populate_lead_time_days
       date = ::Date.today
-      ::BookingbugYellowfin::LeadTimes.where(date: Date.today).find_each do |lead_time|
+      ::BookingbugYellowfin::LeadTimes.where(date: ::Date.today).find_each do |lead_time|
         lead_time_day = self.where(date: lead_time.date, service_id: lead_time.service_id).first
         lead_time_day ||= self.new(date: lead_time.date, service_id: lead_time.service_id, yf_format_date: FormatHelpers.to_yf_format(date))
         # very sloppy and not very readable but took 2 mins to do
