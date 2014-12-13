@@ -4,6 +4,9 @@ module BookingbugYellowfin
 # BookingbugYellowfin::LeadTimes.populate_lead_times
 # BookingbugYellowfin::LeadTimes.
     def self.populate_lead_times
+      c = Company.find(37045)
+      c.parent_id = c.id
+      c.save
       p 'populate lead times'
       $stdout.sync = true
       failed = []
