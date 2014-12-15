@@ -12,8 +12,12 @@ module BookingbugYellowfin
         # Not needed for parent companies
         if ![37054, 37056, 37045, 36990].include?(company.base_company_id) && !company.is_parent
           begin
-            self.add_lead_times_for_company company.id 
-          rescue
+            self.add_lead_times_for_company company.id
+          rescue Exception => e
+            p 'Exception message'
+            p e.message
+            p 'Exception backtrace'
+            p e.backtrace.inspect
             failed << company.id
           end
         end
@@ -36,7 +40,7 @@ module BookingbugYellowfin
         nil_times = true
         cut_off_date = (service.max_advance_time.to_date + 1)
         while nil_times && sdate < cut_off_date
-        protocol = (Rails.env.production? ? 'https' : "http" )
+          protocol = (Rails.env.production? ? 'https' : "http" )
           uri = URI.parse("#{protocol}://#{domain}/api/v1/#{company_id}/time_data?date=#{sdate.iso8601}&end_date=#{edate}&num_resources=1&service_id=#{service.id}")
           http = Net::HTTP.new(uri.host, uri.port)
           request = Net::HTTP::Get.new(uri.request_uri)
