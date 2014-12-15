@@ -30,7 +30,7 @@ module BookingbugYellowfin
                                                      :fields=>View::ReportsController::DATA_GROUPS[1][:reports][14][:fields]
                                                    }
       for row in rows
-        next if row[19].blank?
+        next if Purchase::Item.find_by_id(row[19]).blank?
         record = BookingbugYellowfin::BookingDetails.where( 
           booking_id: row[0]
           ).first
