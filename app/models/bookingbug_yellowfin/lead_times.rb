@@ -67,7 +67,7 @@ module BookingbugYellowfin
                     lead_times.time_found event_date, :am, service
                   elsif t >= 720 && t < 1020 && time["avail"] == 1
                     lead_times.time_found event_date, :pm, service
-                  elsif t > 1020 && time["avail"] == 1
+                  elsif t >= 1020 && time["avail"] == 1
                     lead_times.time_found event_date, :ev, service
                   end
                   break if lead_times.lead_times_found? ::Date.parse(event["date"])
