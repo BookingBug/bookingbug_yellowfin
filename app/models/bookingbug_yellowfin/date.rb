@@ -9,7 +9,7 @@ module BookingbugYellowfin
       last_date = BookingbugYellowfin::Date.last
       ::Date.parse(last_date.date).upto(::Date.today+4.months) do |d|
         print '.'
-        BookingbugYellowfin::Date.create(date: d.strftime("%Y/%m/%d"))
+        BookingbugYellowfin::Date.create(date: d.strftime("%Y/%m/%d"), typed_date: d)
       end
     end
   end
