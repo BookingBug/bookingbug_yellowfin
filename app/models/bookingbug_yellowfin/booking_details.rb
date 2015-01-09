@@ -21,7 +21,9 @@ module BookingbugYellowfin
     def self.add_booking_details_for_company company_id, sdate, edate = ::Date.tomorrow
       days = (::Date.today - sdate) if sdate
       e_days = (::Date.today - edate) if edate
-      titles, rows = View::ReportsController.generate_report_data View::ReportsController::DATA_GROUPS[1][:reports][14],
+      block = View::ReportsController::DATA_GROUPS[1][:reports][14]
+      block[:date_field] = "updated_at"
+      titles, rows = View::ReportsController.generate_report_data block,
                                                    company_id,
                                                    company_id.to_s,
                                                    {
