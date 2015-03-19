@@ -4,16 +4,22 @@ module BookingbugYellowfin
 # BookingbugYellowfin::LeadTimes.populate_lead_times
 # BookingbugYellowfin::LeadTimes.
     def self.populate_lead_times
-      c = Company.find(37045)
-      c.parent_id = c.id
-      c.save
+      
+      
+      if LOCALE == "JLEWIS"
+        c = Company.find(37045)
+        c.parent_id = c.id
+        c.save
+      end
+
       p 'populate lead times'
       $stdout.sync = true
       failed = []
       for company in Company.where("cancelled != ? and template is null or template = ?", true, false)
         print '.'
         # Not needed for parent companies
-        if ![37054, 37056, 37045, 36990].include?(company.base_company_id) && !company.is_parent
+        ignore_arr = LOCAL_SETTINGS["ignore_companies"] || [37054, 37056, 37035, 37045, 36990]
+        if !ignore_arr.include?(company.base_company_id) && !company.is_parent
           begin
             self.add_lead_times_for_company company.id
           rescue Exception => e
