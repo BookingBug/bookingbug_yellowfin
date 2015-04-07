@@ -1,7 +1,7 @@
 module BookingbugYellowfin
   class Date < ActiveRecord::Base
     validates_uniqueness_of :date
-    attr_accessible :date
+    attr_accessible :date, :typed_date
 
     def self.populate_four_months_forward
       p 'populate date four months forward'
