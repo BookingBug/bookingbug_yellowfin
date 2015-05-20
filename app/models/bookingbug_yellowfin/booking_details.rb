@@ -9,6 +9,7 @@ module BookingbugYellowfin
       end
     end
 
+    # actually amends bookings from the last 2 days till tomorrow
     def self.amend_yesterdays_bookings
       p 'Starting amend_yesterdays_bookings...'
       $stdout.sync = true
