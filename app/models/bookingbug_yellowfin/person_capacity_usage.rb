@@ -80,7 +80,7 @@ module BookingbugYellowfin
           failed_people << person.id
         end
       end
-      if failed_people
+      if failed_people.present?
         p 'failed for person(staff) **********'
         p failed_people
         raise "Failed Import"
