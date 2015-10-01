@@ -4,8 +4,10 @@ module BookingbugYellowfin
       p 'Starting populate_all_booking_details...'
       $stdout.sync = true
       Company.find_each() do |company|
-        print '.'
-        add_booking_details_for_company company.id, company.created_at.to_date
+        (company.created_at.to_date..::Date.tomorrow).step(2) do |date|
+          print '.'
+          add_booking_details_for_company company.id, date, (date + 3.days)
+        end
       end
     end
 
