@@ -6,8 +6,7 @@ module BookingbugYellowfin
     def self.populate_four_months_forward
       p 'populate date four months forward'
       $stdout.sync = true
-      
-      last_date = BookingbugYellowfin::Date.last || BookingbugYellowfin::Date.create(date: ::Date.today.strftime("%Y/%m/%d"), typed_date: ::Date.today.to_s)
+      last_date = BookingbugYellowfin::Date.last || BookingbugYellowfin::Date.create(date: ::Date.today.strftime("%Y/%m/%d"), typed_date: ::Date.today)
 
       ::Date.parse(last_date.date).upto(::Date.today+4.months) do |d|
         print '.'
