@@ -5,7 +5,15 @@ module BookingbugYellowfin
       csv_text = File.read(csv_filepath)
       csv = CSV.parse(csv_text, :headers => false)
       csv.each do |row|
-        BookingbugYellowfin::TradingPeriod.create!(date: ::Date.parse(row[0]), yf_date: BookingbugYellowfin::FormatHelpers.to_yf_format(::Date.parse(row[0])), year: row[1].to_i, month: row[2], period: row[3].to_i, week: row[4].to_i)
+        BookingbugYellowfin::TradingPeriod.create!(date: ::Date.parse(row[0]),
+                                                   yf_date: BookingbugYellowfin::FormatHelpers.to_yf_format(::Date.parse(row[0])),
+                                                   year: row[1].to_i,
+                                                   month: row[2],
+                                                   period: row[3].to_i,
+                                                   week: row[4].to_i,
+                                                   period_string: row[5],
+                                                   week_string: row[6],
+                                                   day_string: row[7])
       end
     end
   end
