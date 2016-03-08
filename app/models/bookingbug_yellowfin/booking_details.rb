@@ -38,7 +38,7 @@ module BookingbugYellowfin
       for row in rows
         next if Purchase::Item.find_by_id(row[fields.find_index(:purchase_item_id)]).blank?
         record = BookingbugYellowfin::BookingDetails.where(
-          booking_id: fields.find_index(:id)
+          booking_id: row[fields.find_index(:id)]
           ).first
         if record.present?
           record.update_attributes!( 
