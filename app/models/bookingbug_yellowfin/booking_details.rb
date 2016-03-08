@@ -5,8 +5,13 @@ module BookingbugYellowfin
       $stdout.sync = true
       Company.find_each() do |company|
         (company.created_at.to_date..::Date.tomorrow).step(2) do |date|
-          print '.'
-          add_booking_details_for_company company.id, date, (date + 3.days)
+          # p "start updating company: "+company.name
+          total_bookings,new_bookings, updated_bookings, discarded_bookings = add_booking_details_for_company company.id, date, (date + 3.days)
+          if new_bookings > 0 || updated_bookings > 0 || discarded_bookings > 0
+            p "bookings for "+company.name+ " ON "+date.to_s+" ***TOTAL BOOKING FOUND:"+total_bookings.to_s+" ***ADDED: "+new_bookings.to_s+" ***UPDATED: "+updated_bookings.to_s+" *****DISCARDED: "+discarded_bookings.to_s
+          else 
+            p "No booking found for "+company.name+ " ON "+date.to_s
+          end
         end
       end
     end
@@ -27,6 +32,10 @@ module BookingbugYellowfin
       block = View::ReportsController::DATA_GROUPS[1][:reports][14]
       block[:date_field] = "updated_at"
       fields = View::ReportsController::DATA_GROUPS[1][:reports][14][:fields]
+      p "********************** BOOKING "
+      p "************************* FROM: "+ (Date.today - days).to_s
+      p "*************************   TO: "+ (Date.today - e_days).to_s
+
       titles, rows = View::ReportsController.generate_report_data block,
                                                    company_id,
                                                    company_id.to_s,
@@ -35,7 +44,13 @@ module BookingbugYellowfin
                                                      :e_days=>e_days, 
                                                      :fields=>fields
                                                    }
+      booking_num = rows.size
+      count_new = 0
+      count_update = 0
       for row in rows
+        if Purchase::Item.find_by_id(row[fields.find_index(:purchase_item_id)]).blank?
+          p "purchase_item_id is blank for "+row.to_s
+        end
         next if Purchase::Item.find_by_id(row[fields.find_index(:purchase_item_id)]).blank?
         record = BookingbugYellowfin::BookingDetails.where(
           booking_id: row[fields.find_index(:id)]
@@ -73,6 +88,7 @@ module BookingbugYellowfin
             feedback: row[fields.find_index(:feedback)],
             pretty_print_multi_status: row[fields.find_index(:pretty_print_multi_status)]
           )
+          count_update = count_update +1
         else
           BookingbugYellowfin::BookingDetails.create!( 
             booking_id: row[fields.find_index(:id)],
@@ -106,8 +122,11 @@ module BookingbugYellowfin
             feedback: row[fields.find_index(:feedback)],
             pretty_print_multi_status: row[fields.find_index(:pretty_print_multi_status)]
           )
+          count_new = count_new + 1
         end
       end
+      discarded_bookings =  (booking_num - count_new - count_update)
+      return booking_num,count_new,count_update,discarded_bookings
     end
   end
 end
