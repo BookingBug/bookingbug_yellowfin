@@ -30,7 +30,7 @@ module BookingbugYellowfin
           booked_time = 0
           blocked_time = 0
           next if person.schedule.blank?
-          total_time = person.schedule.total_time_available_for_date(cdate)/60.0 #Convert to hours
+          total_time = person.schedule.total_time_available_for_date(cdate).to_i/60.0 #Convert to hours
           booked_slots = Slot.where(person_id: person.id, date: cdate, status: Slot::BOOKING_BOOKED)
           for slot in booked_slots
             booked_time += slot.ilen*5
